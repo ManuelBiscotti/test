@@ -94,14 +94,18 @@ function Get-ConsoleWidth {
 if ($PSBoundParameters.Count -gt 0) {
     try {
 if ($CPlusPlus) {
-    $c = Join-Path $env:TEMP 'Invoke-CPlusPlus.ps1'
+    $GetFile = Join-Path $env:TEMP 'Get-FileFromWeb.ps1'
+    $Cpp = Join-Path $env:TEMP 'Invoke-CPlusPlus.ps1'
 
-    Invoke-WebRequest -UseBasicParsing -Uri 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-CPlusPlus.ps1' -OutFile $c
+    Invoke-WebRequest -UseBasicParsing -Uri 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Get-FileFromWeb.ps1' -OutFile $GetFile
+    Invoke-WebRequest -UseBasicParsing -Uri 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-CPlusPlus.ps1' -OutFile $Cpp
 
-    . $c
+    . $GetFile
+    . $Cpp
 
     Invoke-CPlusPlus
 }
+
 
 
 
