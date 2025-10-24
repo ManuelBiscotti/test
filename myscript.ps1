@@ -5,10 +5,6 @@
 
 	.DESCRIPTION 
 
-	.PARAMETER Recommended
-
-	.PARAMETER Full
-
 	.LINK
 	https://github.com/ManuelBiscotti/Windows
 #>
@@ -18,9 +14,20 @@
 
 ##############
 # Parameters #
+
+	<#
+		.PARAMETER CPlusPlus
+
+		.PARAMETER DisableDefender
+
+		.PARAMETER EnableDefender
+	#>
+
 [CmdletBinding()]
 param (
-	[switch]$CPlusPlus
+	[switch]$CPlusPlus,
+	[switch]$DisableDefender,
+	[switch]$EnableDefender
 
 )
 ##############
@@ -28,15 +35,63 @@ param (
 
 
 
+#############
+# Functions #
 function Invoke-CPlusPlus {
+
     . ([ScriptBlock]::Create((irm 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Get-FileFromWeb.ps1')))
     . ([ScriptBlock]::Create((irm 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-CPlusPlus.ps1')))
     Invoke-CPlusPlus
+
+}
+
+function Invoke-DisableDefender {
+
+    . ([ScriptBlock]::Create((irm 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-DisableDefender.ps1')))
+	Invoke-DisableDefender
+
+}
+
+function Invoke-EnableDefender {
+    . ([ScriptBlock]::Create((irm 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-EnableDefender.ps1')))
+	Invoke-EnableDefender
+
+}
+#############
+
+
+
+
+# -------------------------
+# If switches used -> run them and exit (no menu)
+# -------------------------
+if ($PSBoundParameters.Count -gt 0) {
+    try {
+		if ($CPlusPlus) {
+			Invoke-CPlusPlus
+		}
+		if ($DisableDefender) {
+			Invoke-DisableDefender
+		}
+		if ($EnableDefender) {
+			Invoke-EnableDefender
+		}
+
+
+
+    } catch {
+        Write-Host $_.Exception.Message -ForegroundColor Red
+		pause
+    }
+    return
 }
 
 
 
 
+# -------------------------
+# Full UI menu (runs only when no switches)
+# -------------------------
 
 function Invoke-Pause {
     try {
@@ -62,29 +117,6 @@ function Get-ConsoleWidth {
     return 80
 }
 
-# -------------------------
-# If switches used -> run them and exit (no menu)
-# -------------------------
-if ($PSBoundParameters.Count -gt 0) {
-    try {
-		if ($CPlusPlus) {
-			Invoke-CPlusPlus
-		}
-
-
-
-
-
-    } catch {
-        Write-Host "Error while running parameter actions: $_" -ForegroundColor Red
-		pause
-    }
-    return
-}
-
-# -------------------------
-# Full UI menu (runs only when no switches)
-# -------------------------
 $global:O = @(
 	'Backup','Activation','Bloatware',
 	'Updates','Telemetry','Security',

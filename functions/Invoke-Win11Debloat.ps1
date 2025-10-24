@@ -1,0 +1,52 @@
+# Debloat Windows 11 using Raph's Script
+function Invoke-Win11Debloat {
+	& ([scriptblock]::Create((Invoke-RestMethod "https://debloat.raphi.re/"))) `
+	    -Silent `
+	    -RemoveApps `
+	    -RemoveHPApps `
+	    -RemoveCommApps `
+	    -RemoveW11Outlook `
+	    -RemoveDevApps `
+	    -DisableDVR `
+	    -DisableStartRecommended `
+	    -DisableStartPhoneLink `
+	    -DisableTelemetry `
+	    -DisableSuggestions `
+	    -DisableEdgeAds `
+	    -DisableDesktopSpotlight `
+	    -DisableLockscreenTips `
+	    -DisableSettings365Ads `
+	    -DisableSettingsHome `
+	    -DisableBing `
+	    -DisableCopilot `
+		-DisableClickToDo `
+	    -DisableRecall `
+	    -DisableEdgeAI `
+	    -DisablePaintAI `
+	    -DisableNotepadAI `
+	    -RevertContextMenu `
+	    -DisableMouseAcceleration `
+	    -DisableStickyKeys `
+	    -DisableFastStartup `
+	    -DisableModernStandbyNetworking `
+	    -ShowHiddenFolders `
+	    -ShowKnownFileExt `
+	    -HideDupliDrive `
+	    -DisableTransparency `
+	    -DisableAnimations `
+	    -TaskbarAlignLeft `
+	    -HideSearchTb `
+	    -HideTaskview `
+	    -HideChat `
+		-DisableWidgets	`
+	    -EnableEndTask `
+		-EnableLastActiveClick `
+	    -HideHome `
+	    -HideGallery `
+	    -ExplorerToThisPC `
+	    -HideOnedrive `
+	    -Hide3dObjects `
+	    -HideIncludeInLibrary `
+	    -HideGiveAccessTo `
+	    -HideShare
+}
