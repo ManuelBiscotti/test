@@ -10,6 +10,9 @@ function Invoke-EnableDefender {
 		
 		.LINK
 			https://github.com/lostzombie/AchillesScript
+			
+		.PARAMETER restore
+			Restoring default settings
 
 	#>
 	
