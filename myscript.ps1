@@ -57,7 +57,10 @@ function Get-ConsoleWidth {
 # -------------------------
 if ($PSBoundParameters.Count -gt 0) {
     try {
-		if ($CPlusPlus)        		{ Invoke-CPlusPlusAIO }
+		if ($CPlusPlus) { 
+			irm "https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Get-FileFromWeb.ps1" | iex; Get-FileFromWeb 
+			irm "https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-CPlusPlus.ps1" | iex; Invoke-CPlusPlus
+		}
 
     } catch {
         Write-Host "Error while running parameter actions: $_" -ForegroundColor Red
