@@ -28,20 +28,19 @@ param (
 
 
 
-function Get-FileFromWeb {
+function Invoke-CPlusPlus {
     $GetFile = Join-Path $env:TEMP 'Get-FileFromWeb.ps1'
-    try {
-        Write-Host "Loading Get-FileFromWeb from GitHub..." -ForegroundColor Cyan
-        Invoke-WebRequest -UseBasicParsing -Uri 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Get-FileFromWeb.ps1' -OutFile $GetFile -ErrorAction Stop
-        if (Test-Path $GetFile) {
-            . $GetFile
-        } else {
-            throw "Download failed — file not found at $GetFile"
-        }
-    } catch {
-        Write-Host "Error loading Get-FileFromWeb: $($_.Exception.Message)" -ForegroundColor Red
-    }
+    $Cpp = Join-Path $env:TEMP 'Invoke-CPlusPlus.ps1'
+
+    Invoke-WebRequest -UseBasicParsing -Uri 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Get-FileFromWeb.ps1' -OutFile $GetFile
+    Invoke-WebRequest -UseBasicParsing -Uri 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-CPlusPlus.ps1' -OutFile $Cpp
+
+    . $GetFile
+    . $Cpp
+
+    Invoke-CPlusPlus
 }
+
 
 
 
@@ -75,13 +74,7 @@ function Get-ConsoleWidth {
 if ($PSBoundParameters.Count -gt 0) {
     try {
 if ($CPlusPlus) {
-    Get-FileFromWeb
-
-    $Cpp = Join-Path $env:TEMP 'Invoke-CPlusPlus.ps1'
-    Invoke-WebRequest -UseBasicParsing -Uri 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-CPlusPlus.ps1' -OutFile $Cpp -ErrorAction Stop
-    . $Cpp
-
-    Invoke-CPlusPlus
+Invoke-CPlusPlus
 }
 
 
