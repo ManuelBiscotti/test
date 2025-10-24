@@ -29,17 +29,11 @@ param (
 
 
 function Invoke-CPlusPlus {
-    $GetFile = Join-Path $env:TEMP 'Get-FileFromWeb.ps1'
-    $Cpp = Join-Path $env:TEMP 'Invoke-CPlusPlus.ps1'
-
-    Invoke-WebRequest -UseBasicParsing -Uri 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Get-FileFromWeb.ps1' -OutFile $GetFile
-    Invoke-WebRequest -UseBasicParsing -Uri 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-CPlusPlus.ps1' -OutFile $Cpp
-
-    . $GetFile
-    . $Cpp
-
+    . ([ScriptBlock]::Create((irm 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Get-FileFromWeb.ps1')))
+    . ([ScriptBlock]::Create((irm 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-CPlusPlus.ps1')))
     Invoke-CPlusPlus
 }
+
 
 
 
@@ -73,9 +67,9 @@ function Get-ConsoleWidth {
 # -------------------------
 if ($PSBoundParameters.Count -gt 0) {
     try {
-if ($CPlusPlus) {
-Invoke-CPlusPlus
-}
+		if ($CPlusPlus) {
+			Invoke-CPlusPlus
+		}
 
 
 
