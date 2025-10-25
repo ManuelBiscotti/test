@@ -103,9 +103,7 @@ Windows Registry Editor Version 5.00
 "IdealWidth.9"="Control Panel"
 "@
 		
-		Set-Content -Path "$env:TEMP\StartIsBack.reg" -Value $MultilineComment -Force
-		# edit reg file
-		$path = "$env:TEMP\StartIsBack.reg"								
+		Set-Content -Path "$env:TEMP\StartIsBack.reg" -Value $MultilineComment -Force							
 		# import reg file
 		Regedit.exe /S "$env:TEMP\StartIsBack.reg"
 		
@@ -120,15 +118,13 @@ Windows Registry Editor Version 5.00
 
 		#>
 		
-		iwr "https://github.com/WitherOrNot/StartXBack/releases/latest/download/StartXBack.cmd" -OutFile "$env:TEMP\StartXBack.cmd"
-		echo. | & "$env:TEMP\StartXBack.cmd"
+		Invoke-WebRequest -Uri "https://github.com/WitherOrNot/StartXBack/releases/latest/download/StartXBack.cmd" -OutFile "$env:TEMP\StartXBack.cmd"
+		(Get-Content "$env:TEMP\StartXBack.cmd") | Where-Object { $_ -ne 'pause' } | Set-Content "$env:TEMP\StartXBack.cmd"
+		& "$env:TEMP\StartXBack.cmd" -Wait
 		
 		# Download x86 DLL
-		Invoke-WebRequest -Uri "https://github.com/WitherOrNot/StartXBack/releases/download/release/version_x86.dll" `
-		    -OutFile "${env:ProgramFiles(x86)}\StartIsBack\version.dll"
+		Invoke-WebRequest -Uri "https://github.com/WitherOrNot/StartXBack/releases/download/release/version_x86.dll" -OutFile "${env:ProgramFiles(x86)}\StartIsBack\version.dll"
 		
-		Write-Host "Done"
-		Start-Process explorer
 	}
 	
 	# StartAllBack (Windows 11)
@@ -141,10 +137,6 @@ Windows Registry Editor Version 5.00
 		Write-Output "Installing StartAllBack silently..."
 		Start-Process -FilePath $installer -ArgumentList "/elevated /silent" -Wait
 
-		# Stop potential blocking processes
-		Write-Output "Terminating potential blocking processes..."
-		Stop-Process -Name explorer,StartAllBack,StartAllBackCfg -Force
-		
 		# Create reg file
 		$MultilineComment = @'
 Windows Registry Editor Version 5.00
@@ -232,9 +224,8 @@ Windows Registry Editor Version 5.00
 '@
 
 		# import reg
-		$regFile = "$env:TEMP\StartAllBack.reg"
-		Set-Content -Path $regFile -Value $MultilineComment -Force
-		reg import $regFile
+		Set-Content -Path "$env:TEMP\StartAllBack.reg" -Value $MultilineComment -Force
+		reg import "$env:TEMP\StartAllBack.reg"
 		
 		# StartAllBack activator (for educational purpose only)
 		irm "https://github.com/YT-Advanced/SAB/raw/refs/heads/main/SAB.ps1" | iex
