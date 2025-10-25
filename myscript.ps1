@@ -26,6 +26,7 @@
 [CmdletBinding()]
 param (
 	[switch]$Recommended,
+	[switch]$RemoveEdge,
 	[switch]$CPlusPlus,
 	[switch]$DisableDefender,
 	[switch]$EnableDefender,
