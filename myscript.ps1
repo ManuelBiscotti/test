@@ -102,7 +102,7 @@ function Invoke-EnableDefender {
 
 }
 
-function Invoke-StartXback {
+function Invoke-StartXBack {
 
     . ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-StartXback')))
 	Invoke-StartXback
@@ -124,7 +124,7 @@ if ($PSBoundParameters.Count -gt 0) {
 		if ($CPlusPlus) { Invoke-CPlusPlus }
 		if ($DisableDefender) { Invoke-DisableDefender }
 		if ($EnableDefender) { Invoke-EnableDefender }
-		if ($StartXback) { Invoke-StartXback }
+		if ($StartXBack) { Invoke-StartXBack }
 
 
     } catch {
