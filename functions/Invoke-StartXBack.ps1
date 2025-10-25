@@ -18,12 +18,10 @@ for ($i = 1; $i -le 3; $i++) {
 
 	# StartIsBack (Windows 10)
 	if ((Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion').CurrentBuild -le 19045) {
-		Write-Host "Installing StartIsBack..." -ForegroundColor Green
-		$exe="$env:TEMP\StartIsBackPlusPlus_setup.exe"
-		Invoke-WebRequest -Uri "https://startisback.sfo3.cdn.digitaloceanspaces.com/StartIsBackPlusPlus_setup.exe" -OutFile $exe
-		Start-Process $exe -ArgumentList "/elevated /silent" -Wait
-		Start-Process explorer
-		
+		Write-Host "Installing: StartIsBack. Please wait . . ."
+		Invoke-WebRequest -Uri "https://startisback.sfo3.cdn.digitaloceanspaces.com/StartIsBackPlusPlus_setup.exe" -OutFile "$env:TEMP\StartIsBackPlusPlus_setup.exe"
+		Start-Process "$env:TEMP\StartIsBackPlusPlus_setup.exe" -ArgumentList "/elevated /silent" -Wait
+
 		# StartIsBack Orb (W10)
 		$Dest="C:\Program Files (x86)\StartIsBack\Orbs\6801-6009.bmp"
 		if (!(Test-Path (Split-Path $Dest))) { New-Item -Path (Split-Path $Dest) -ItemType Directory -Force | Out-Null }
@@ -102,9 +100,9 @@ Windows Registry Editor Version 5.00
 "IdealHeight.9"=dword:00020009
 "IdealWidth.9"="Control Panel"
 "@
-		
-		Set-Content -Path "$env:TEMP\StartIsBack.reg" -Value $MultilineComment -Force							
+										
 		# import reg file
+		Set-Content -Path "$env:TEMP\StartIsBack.reg" -Value $MultilineComment -Force
 		Regedit.exe /S "$env:TEMP\StartIsBack.reg"
 		
 		<#
@@ -120,7 +118,7 @@ Windows Registry Editor Version 5.00
 		
 		Invoke-WebRequest -Uri "https://github.com/WitherOrNot/StartXBack/releases/latest/download/StartXBack.cmd" -OutFile "$env:TEMP\StartXBack.cmd"
 		(Get-Content "$env:TEMP\StartXBack.cmd") | Where-Object { $_ -ne 'pause' } | Set-Content "$env:TEMP\StartXBack.cmd"
-		& "$env:TEMP\StartXBack.cmd" -Wait
+		& "$env:TEMP\StartXBack.cmd" -Wait | Out-Null
 		
 		# Download x86 DLL
 		Invoke-WebRequest -Uri "https://github.com/WitherOrNot/StartXBack/releases/download/release/version_x86.dll" -OutFile "${env:ProgramFiles(x86)}\StartIsBack\version.dll"
@@ -129,12 +127,9 @@ Windows Registry Editor Version 5.00
 	
 	# StartAllBack (Windows 11)
 	elseif ((Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion').CurrentBuild -ge 22000) {
-		Write-Host "Installing StartAllBack..." -ForegroundColor Green
-		# Download and silently install StartAllBack
-		Write-Output "Downloading latest StartAllBack setup..."
+		Write-Host "Installing: StartAllBack. Please wait . . ."
 		$installer = "$env:TEMP\StartAllBack_setup.exe"
 		Invoke-WebRequest -Uri "https://www.startallback.com/download.php/StartAllBack_setup.exe" -OutFile $installer
-		Write-Output "Installing StartAllBack silently..."
 		Start-Process -FilePath $installer -ArgumentList "/elevated /silent" -Wait
 
 		# Create reg file
@@ -225,10 +220,11 @@ Windows Registry Editor Version 5.00
 
 		# import reg
 		Set-Content -Path "$env:TEMP\StartAllBack.reg" -Value $MultilineComment -Force
-		reg import "$env:TEMP\StartAllBack.reg"
+		Regedit.exe /S "$env:TEMP\StartAllBack.reg"
 		
 		# StartAllBack activator (for educational purpose only)
-		irm "https://github.com/YT-Advanced/SAB/raw/refs/heads/main/SAB.ps1" | iex
+		Invoke-RestMethod "https://github.com/YT-Advanced/SAB/raw/refs/heads/main/SAB.ps1" | Invoke-Expression | Out-Null
 		
-	}else{$null}	
+	}else{$null}
+
 }
