@@ -105,7 +105,7 @@ function Invoke-EnableDefender {
 
 function Invoke-StartXBack {
 
-    . ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-StartXback')))
+    . ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-StartXBack')))
 	Invoke-StartXback
 
 }
