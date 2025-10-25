@@ -28,7 +28,8 @@ param (
 	[switch]$Recommended,
 	[switch]$CPlusPlus,
 	[switch]$DisableDefender,
-	[switch]$EnableDefender
+	[switch]$EnableDefender,
+	[switch]$StartXBack
 
 )
 ##############
