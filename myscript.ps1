@@ -74,6 +74,13 @@ function Invoke-EdgeDebloat {
 
 }
 
+function Invoke-EdgeRemove {
+
+	. ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-EdgeRemove.ps1')))
+    Invoke-EdgeRemove
+
+}
+
 function Invoke-DisablePowerSaving {
 
 	. ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-DisablePowerSaving.ps1')))
@@ -109,6 +116,8 @@ function Invoke-StartXBack {
 	Invoke-StartXback
 
 }
+
+
 #############
 
 
@@ -126,7 +135,7 @@ if ($PSBoundParameters.Count -gt 0) {
 		if ($DisableDefender) { Invoke-DisableDefender }
 		if ($EnableDefender) { Invoke-EnableDefender }
 		if ($StartXBack) { Invoke-StartXBack }
-
+		if ($RemoveEdge) { Invoke-EdgeRemove }
 
     } catch {
         Write-Host $_.Exception.Message -ForegroundColor Red
