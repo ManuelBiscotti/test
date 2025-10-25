@@ -1,4 +1,4 @@
-function Invoke-PauseWinUpdate {
+function Invoke-WinUpdatePause {
     Write-Host "Pausing Windows Updates..." -ForegroundColor Green
     $reg = Join-Path $env:TEMP 'windows-updates-pause.reg'
     Invoke-WebRequest -Uri 'https://github.com/Aetherinox/pause-windows-updates/raw/refs/heads/main/windows-updates-pause.reg' -OutFile $reg -UseBasicParsing

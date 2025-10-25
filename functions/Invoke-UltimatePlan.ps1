@@ -1,4 +1,4 @@
-function Invoke-ActivateUltimatePlan {
+function Invoke-UltimatePlan {
 <#
     # ULTIMATE PERFORMANCE POWER PLAN CONFIGURATION
     # Configures system for maximum performance by activating Ultimate Performance power plan

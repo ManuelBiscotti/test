@@ -102,14 +102,17 @@ Windows Registry Editor Version 5.00
 "IdealHeight.9"=dword:00020009
 "IdealWidth.9"="Control Panel"
 "@
+		
 		Set-Content -Path "$env:TEMP\StartIsBack.reg" -Value $MultilineComment -Force
 		# edit reg file
 		$path = "$env:TEMP\StartIsBack.reg"								
 		# import reg file
 		Regedit.exe /S "$env:TEMP\StartIsBack.reg"
-
+		
 		<#
-			Start X Back
+		
+			SYNOPSIS.
+				Start X Back
 			ABOUT.
 				Developed in collaboration with MAS & ASDCORP
 			LINK.
@@ -117,56 +120,8 @@ Windows Registry Editor Version 5.00
 
 		#>
 		
-		function Update-Exp($DLL) {
-			$UserDLL = "$Env:LocalAppData\$DLL"
-			$SystemDLL64 = "$Env:ProgramFiles\$DLL"
-			$SystemDLL32 = "${Env:ProgramFiles(x86)}\$DLL"
-			
-			$Paths = @()
-			
-			if(Test-Path -Path $UserDLL) { $Paths += ,$UserDLL }
-			if(Test-Path -Path $SystemDLL64) { $Paths += ,$SystemDLL64 }
-			if(Test-Path -Path $SystemDLL32) { $Paths += ,$SystemDLL32 }
-			
-			foreach($Path in $Paths) {
-				$Backup = "$Path.bak"
-				if(Test-Path -Path $Backup) {
-					Write-Host "$Path has already been patched! If you wish to restore the unpatched copy, delete $Path and rename $Path.bak to $Path"
-				} else {
-					Write-Host "Patching $Path..."
-					Copy-Item -Path $Path -Destination $Backup
-					$Bytes = Get-Content $Path -Raw -Encoding Byte
-					$String = $Bytes.ForEach('ToString', 'X2') -join ' '
-					$String = $String -replace '\b52 53 41 31 00 04 00 00 03 00 00 00 80 00 00 00 00 00 00 00 00 00 00 00 01 00 01\b(.*)', '52 53 41 31 00 04 00 00 03 00 00 00 80 00 00 00 00 00 00 00 00 00 00 00 00 00 01$1'
-					[byte[]]$ModifiedBytes = -split $String -replace '^', '0x'
-					Set-Content -Path $Path -Value $ModifiedBytes -Encoding Byte
-					Write-Host "Patched $Path"
-				}
-			}
-		}
-		
-		function Install-License($registryPath) {
-		    New-Item $registryPath | Out-Null
-		    Set-ItemProperty -Path $registryPath -Name "LicenseHash" -Value "deadbeefdeadbeefdeadbeefdeadbeef"
-		    Set-ItemProperty -Path $registryPath -Name "ActivationData" -Value "deadbeefdeadbeefdeadbeefdeadbeef4e9934f69c3fd8c3e8502a2fd1ab89c2e78671d38a9b97ba313f5eaba6fd420f"
-		    Write-Host "Installed license at $registryPath"
-		}
-		
-		Write-Host "Killing processes..."
-		cmd.exe /c taskkill /f /im explorer.exe | Out-Null
-		cmd.exe /c taskkill /f /im shellhost.exe | Out-Null
-		Stop-Process -Name StartIsBackCfg
-		Stop-Process -Name StartAllBackCfg
-		Start-Sleep 1
-		
-		Write-Host "Patching DLLs..."
-		Update-Exp "StartIsBack\StartIsBack32.dll"
-		Update-Exp "StartIsBack\StartIsBack64.dll"
-		Update-Exp "StartAllBack\StartAllBackX64.dll"
-		
-		Write-Host "Installing licenses"
-		Install-License "HKCU:\Software\StartIsBack\License"
-		Install-License "HKLM:\Software\StartIsBack\License"
+		iwr "https://github.com/WitherOrNot/StartXBack/releases/latest/download/StartXBack.cmd" -OutFile "$env:TEMP\StartXBack.cmd"
+		echo. | & "$env:TEMP\StartXBack.cmd"
 		
 		# Download x86 DLL
 		Invoke-WebRequest -Uri "https://github.com/WitherOrNot/StartXBack/releases/download/release/version_x86.dll" `
@@ -175,7 +130,7 @@ Windows Registry Editor Version 5.00
 		Write-Host "Done"
 		Start-Process explorer
 	}
-
+	
 	# StartAllBack (Windows 11)
 	elseif ((Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion').CurrentBuild -ge 22000) {
 		Write-Host "Installing StartAllBack..." -ForegroundColor Green
@@ -275,46 +230,14 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CURRENT_USER\Software\StartIsBack\Recolor]
 '@
-		# Apply registry tweaks
-		Write-Output "Applying registry tweaks"
+
+		# import reg
 		$regFile = "$env:TEMP\StartAllBack.reg"
 		Set-Content -Path $regFile -Value $MultilineComment -Force
 		reg import $regFile
 		
-		# StartAllBack activator (for educational purpose only) https://github.com/YT-Advanced/SAB
-		Write-Output "Activating StartAllBack..."
-		# $sab = "$env:TEMP\SAB.ps1"
-		# iwr "https://raw.githubusercontent.com/YT-Advanced/SAB/main/SAB.ps1" -OutFile $sab
-		# powershell -ExecutionPolicy Bypass -File $sab
-	  
-		$DLL = "StartAllBack\StartAllBackX64.dll"
-		$UserDLL = "$Env:LocalAppData\$DLL"
-		$SystemDLL64 = "$Env:ProgramFiles\$DLL"
-		$SystemDLL32 = "${Env:ProgramFiles(x86)}\$DLL"
-		$Paths = @()
-		if(Test-Path -Path $UserDLL) { $Paths += ,$UserDLL }
-		if(Test-Path -Path $SystemDLL64) { $Paths += ,$SystemDLL64 }
-		if(Test-Path -Path $SystemDLL32) { $Paths += ,$SystemDLL32 }
+		# StartAllBack activator (for educational purpose only)
+		irm "https://github.com/YT-Advanced/SAB/raw/refs/heads/main/SAB.ps1" | iex
 		
-		foreach($Path in $Paths) {
-			$Backup = "$Path.bak"
-			if(Test-Path -Path $Backup) {
-				Remove-Item -Path $Path -Force
-				Rename-Item -Path $Backup -NewName $Path
-			} else {
-				Copy-Item -Path $Path -Destination $Backup
-				$Bytes = Get-Content $Path -Raw -Encoding Byte # Read as ByteStream
-				$String = $Bytes.ForEach('ToString', 'X') -join ' '
-
-				# Replace 
-				$String = $String -replace '\b48 89 5C 24 8 55 56 57 48 8D AC 24 70 FF FF FF\b(.*)', '67 C7 1 1 0 0 0 B8 1 0 0 0 C3 90 90 90$1'
-		
-				[byte[]]$ModifiedBytes = -split $String -replace '^', '0x'
-				Set-Content -Path $Path -Value $ModifiedBytes -Encoding Byte # Save as ByteStream
-			}
-		}	
-		# Restart Explorer
-		Start-Process explorer
-	}	
-	else { $null }	
+	}else{$null}	
 }

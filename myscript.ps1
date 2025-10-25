@@ -25,6 +25,7 @@
 
 [CmdletBinding()]
 param (
+	[switch]$Recommended,
 	[switch]$CPlusPlus,
 	[switch]$DisableDefender,
 	[switch]$EnableDefender
@@ -37,24 +38,74 @@ param (
 
 #############
 # Functions #
+function Invoke-WinActive {
+
+    . ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-WinActive.ps1')))
+	Invoke-WinActive
+
+}
+
+function Invoke-WinUpdatePause {
+
+	. ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-WinUpdatePause.ps1')))
+    Invoke-WinUpdatePause
+
+}
+
+function Invoke-UltimatePlan {
+
+	. ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-UltimatePlan.ps1')))
+    Invoke-UltimatePlan
+
+}
+
+function Invoke-Bloatware {
+
+	. ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-UninstallOneDrive.ps1')))
+    
+
+}
+
+function Invoke-EdgeDebloat {
+
+	. ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-EdgeDebloat.ps1')))
+    Invoke-EdgeDebloat
+
+}
+
+function Invoke-DisablePowerSaving {
+
+	. ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-DisablePowerSaving.ps1')))
+    Invoke-DisablePowerSaving
+
+}
+
 function Invoke-CPlusPlus {
 
-    . ([ScriptBlock]::Create((irm 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Get-FileFromWeb.ps1')))
-    . ([ScriptBlock]::Create((irm 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-CPlusPlus.ps1')))
+    . ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Get-FileFromWeb.ps1')))
+    . ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-CPlusPlus.ps1')))
     Invoke-CPlusPlus
 
 }
 
 function Invoke-DisableDefender {
 
-    . ([ScriptBlock]::Create((irm 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-DisableDefender.ps1')))
+    . ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-DisableDefender.ps1')))
 	Invoke-DisableDefender
 
 }
 
 function Invoke-EnableDefender {
-    . ([ScriptBlock]::Create((irm 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-EnableDefender.ps1')))
+
+    . ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-EnableDefender.ps1')))
 	Invoke-EnableDefender
+
+}
+
+function Invoke-StartXback {
+
+    . ([ScriptBlock]::Create((Invoke-RestMethod 'https://github.com/ManuelBiscotti/test/raw/refs/heads/main/functions/Invoke-StartXback')))
+	Invoke-StartXback
 
 }
 #############
@@ -67,16 +118,13 @@ function Invoke-EnableDefender {
 # -------------------------
 if ($PSBoundParameters.Count -gt 0) {
     try {
-		if ($CPlusPlus) {
-			Invoke-CPlusPlus
+		if ($Recommended) {
+		
 		}
-		if ($DisableDefender) {
-			Invoke-DisableDefender
-		}
-		if ($EnableDefender) {
-			Invoke-EnableDefender
-		}
-
+		if ($CPlusPlus) { Invoke-CPlusPlus }
+		if ($DisableDefender) { Invoke-DisableDefender }
+		if ($EnableDefender) { Invoke-EnableDefender }
+		if ($StartXback) { Invoke-StartXback }
 
 
     } catch {

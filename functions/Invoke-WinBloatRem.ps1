@@ -102,44 +102,7 @@ function Invoke-RemWinBloat {
 	# Remove-WindowsCapability -Online -Name "Windows.Kernel.LA57~~~~0.0.1.0" | Out-Null
 	# Remove Character Map
 	Write-Output "Removing Character Map..."
-    function Set-ForceOwnership($p){
-		cmd /c "takeown /f `"$p`" /a /r /d y >nul 2>&1"
-		cmd /c "icacls `"$p`" /grant Administrators:F Everyone:F /t /c /q >nul 2>&1"
-		$a=Get-Acl $p;if($a){$a.SetOwner([System.Security.Principal.NTAccount]"Administrators")
- 			Set-Acl $p $a
-		}
-  	}
-  	function Remove-Aggressive($p){
-   		if(Test-Path $p){
-	 		Set-ForceOwnership $p
-  			Remove-Item $p -Force -Recurse
- 			cmd /c "attrib -r -s -h `"$p`" /s /d >nul 2>&1 & del /f /s /q `"$p`" & rd /s /q `"$p`" >nul 2>&1"
-		}
-  	}
-	$p = @(
-	    "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Accessories",
-	    "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Windows Accessories", 
-	    "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Windows Tools",
-	    "$env:ProgramData\Microsoft\Windows\Start Menu\Programs",
-	    "$env:AppData\Microsoft\Windows\Start Menu\Programs",
-	    "$env:UserProfile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs",
-	    "$env:AllUsersProfile\Microsoft\Windows\Start Menu\Programs",
-	    "$env:CommonProgramFiles\Microsoft Shared\Windows\Start Menu\Programs"
-	)	
-	$n = @(
-	    "Character Map.lnk",
-	    "Character Map", 
-	    "charmap.lnk",
-	    "charmap"
-	)
-	$p | ForEach-Object { 
-	    $d = $_
-	    $n | ForEach-Object {
-	        Get-ChildItem -Path $d -Recurse -Filter "*$_*" | ForEach-Object {
-	            Remove-Aggressive $_.FullName
-	        }
-	    }
-	} > $null 2>&1
+	Remove-Item "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Accessories\System Tools\Character Map.lnk" -Force -ErrorAction SilentlyContinue | Out-Null
 
     # DISABLE WINDOWS FEATURES
 	Write-Host "Disabling Windows Features..." -ForegroundColor Green
@@ -607,6 +570,7 @@ public class Wallpaper {
 		Write-Output "Restoring New Text Document context menu item..."
 		Invoke-WebRequest -Uri "https://github.com/vishnusai-karumuri/Registry-Fixes/raw/refs/heads/master/Restore_New_Text_Document_context_menu_item.reg" -OutFile "$env:TEMP\Restore_New_Text_Document_context_menu_item.reg"
   		Start-Process regedit.exe -ArgumentList "/s `"$env:TEMP\Restore_New_Text_Document_context_menu_item.reg`"" -Wait	
+<#
 		# Add "Edit with Notepad" to right-click context menu
 		Write-Output "Adding Edit with Notepad to right-click context menu..."
 		# Create .reg file
@@ -628,6 +592,6 @@ Windows Registry Editor Version 5.00
 		Write-Output "Found unsupported Winver..." -ForegroundColor Red
 		Timeout /T 5 | Out-Null
 	} 
-
+#>
 	Stop-Process -Name explorer -Force | Out-Null
 }

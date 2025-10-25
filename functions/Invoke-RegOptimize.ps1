@@ -294,6 +294,17 @@ Windows Registry Editor Version 5.00
 
 
 ; SYSTEM AND SECURITY
+; Disable Windows Platform Binary Table (WPBT)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager]
+"DisableWpbtExecution"=dword:00000001
+
+; allow powershell scripts
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell]
+"ExecutionPolicy"="Unrestricted"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell]
+"ExecutionPolicy"="Unrestricted"
+
 ; prefer IPv4 over IPv6
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters]
 "DisabledComponents"=dword:00000020
@@ -2817,17 +2828,6 @@ E0,F6,C5,D5,0E,CA,50,00,00
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Policies\Microsoft\WMDRM]
 "DisableOnline"=dword:00000001
-
-
-
-
-; POWERSHELL
-; allow powershell scripts
-[HKEY_CURRENT_USER\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell]
-"ExecutionPolicy"="Unrestricted"
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell]
-"ExecutionPolicy"="Unrestricted"
 '@
 
 	# Signout Lockscreen

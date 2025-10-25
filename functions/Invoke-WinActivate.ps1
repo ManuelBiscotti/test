@@ -1,5 +1,5 @@
 # Activate Windows
-function Invoke-WinActivation {
+function Invoke-WinActive {
 <#
 .SYNOPSIS
     Activates a permanent Microsoft Digital License for Windows 10/11.
